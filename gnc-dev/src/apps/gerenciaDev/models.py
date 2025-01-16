@@ -22,7 +22,7 @@ class Programador(models.Model):
         editable=False
     ) 
     nome = models.CharField(max_length=100)
-    tecnologias = models.ManyToManyField(Tecnologias, on_delete=models.CASCADE)
+    tecnologias = models.ManyToManyField(Tecnologias)
 
     def __str__(self):
         return f"{self.nome}, Tecnologia: {self.tecnologias}"
@@ -39,7 +39,7 @@ class Projetos(models.Model):
     nome = models.CharField(max_length=100)
     datainicio = models.DateField()
     datafim = models.DateField()
-    tecnologias = models.ManyToManyField(Tecnologias, on_delete=models.CASCADE)
+    tecnologias = models.ManyToManyField(Tecnologias)
 
     def __str__(self):
         return f"Projeto:{self.nome}, Tecnologias: {self.tecnologias}"
@@ -53,7 +53,7 @@ class Alocacoes(models.Model):
         default=uuid.uuid4,
         editable=False
     ) 
-    projetos = models.ManyToManyField(Projetos, on_delete=models.CASCADE)
+    projetos = models.ManyToManyField(Projetos)
     desenvolvedor = models.ForeignKey(Programador, on_delete=models.CASCADE)
     horas = models.TimeField()
 

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'apps.gerenciaDev.apps.GereciadevConfig',
+    'apps.gerenciaDev.apps.GerenciadevConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,11 +77,13 @@ WSGI_APPLICATION = 'gnc_dev.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        "OPTIONS": {
-            "read_default_file": BASE_DIR / "my_pgs.cnf",
-        },
+    'default': { 
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': 'gncdev', 
+        'USER': 'postgres', 
+        'PASSWORD': 'Arrebatamento2#', 
+        'HOST': 'localhost', 
+        'PORT': '3309', 
     }
 }
 
