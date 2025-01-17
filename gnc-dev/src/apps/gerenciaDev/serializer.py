@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from gerenciaDev import models
+from . import models
 
 
 class ProgramadorSerializer(serializers.ModelSerializer):

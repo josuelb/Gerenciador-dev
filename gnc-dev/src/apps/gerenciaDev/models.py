@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 import uuid
 
 
@@ -40,6 +41,7 @@ class Projetos(models.Model):
     datainicio = models.DateField()
     datafim = models.DateField()
     tecnologias = models.ManyToManyField(Tecnologias)
+    horas = models.TimeField()
 
     def __str__(self):
         return f"Projeto:{self.nome}, Tecnologias: {self.tecnologias}"
@@ -56,6 +58,7 @@ class Alocacoes(models.Model):
     projetos = models.ManyToManyField(Projetos)
     desenvolvedor = models.ForeignKey(Programador, on_delete=models.CASCADE)
     horas = models.TimeField()
+    data_alocacao = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f"""
