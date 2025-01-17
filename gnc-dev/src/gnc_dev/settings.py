@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os 
+import sys
 
 from pathlib import Path
 
@@ -86,7 +88,11 @@ DATABASES = {
         'PORT': '3309', 
     }
 }
-
+if 'test' in sys.argv or 'test_coverage' in sys.argv: 
+    DATABASES['default'] = { 
+        'ENGINE': 'django.db.backends.sqlite3', 
+        'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'), 
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
