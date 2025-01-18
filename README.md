@@ -74,11 +74,11 @@ build-backend = "poetry.core.masonry.api"
 ## API screen
 
 A url deve ir ate o ***/api*** onde está mostrando todas as urls.
-![Img urls]
+![Img urls](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/urls.jpeg)
 
 #### Campo de Login 
 
-![Img authenticação](https://github.com/josuelb/Gerenciador_Books/blob/9faf2ec526389418c0bf08b7ee7905d49f1df294/imgs_readme/start_docs_3.png)
+![Img authenticação](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/register.jpeg)
 
 ## Passos pra startar a api
 
@@ -143,6 +143,6 @@ Para certifica-se que esta tudo bem gere os testes.
 python manage.py test apps/gerenciaDev/tests
 ````
 
-![Img test](https://github.com/josuelb/Gerenciador_Books/blob/9faf2ec526389418c0bf08b7ee7905d49f1df294/imgs_readme/tests_sucess.png)
-
+![Img test](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/test1.png)
+![Img test2](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/test2.png)
 ### Iniciar a api
