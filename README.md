@@ -76,6 +76,11 @@ build-backend = "poetry.core.masonry.api"
 A url deve ir ate o ***/api*** onde está mostrando todas as urls.
 ![Img urls](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/urls.jpeg)
 
+Para acessar token:
+***api/token/***
+Para recuperar:
+***api/token/refresh/***
+
 #### Campo de Login 
 
 ![Img authenticação](https://github.com/josuelb/Gerenciador-dev/blob/main/imgs/register.jpeg)
