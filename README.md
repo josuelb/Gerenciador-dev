@@ -82,16 +82,6 @@ A url deve ir ate o ***/api*** onde está mostrando todas as urls.
 
 ## Passos pra startar a api
 
-### Inicializar o redis e o banco de dados  
-
-O banco de dados e o cache devem ser iniciados antes de tudo.
-
-No windows usa-se o comando para iniciar o redis:
-
-```powershell
-redis-server
-```
-
 ### Alterar o settings.py
 
 Altere o settings no:
