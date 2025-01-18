@@ -1,14 +1,24 @@
+import json
 from django.utils.dateparse import parse_datetime
+from django.contrib.auth.models import User
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from http import HTTPStatus
 
 from . import serializer
 from . import models
 
+class UserCreateView(viewsets.ModelViewSet): 
+    queryset = User.objects.all() 
+    serializer_class = serializer.UserSerializer
+
 class ProgramadorView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    
     serializer_class = serializer.ProgramadorSerializer
     queryset = models.Programador.objects.all()
 
@@ -37,6 +47,8 @@ class ProgramadorView(viewsets.ModelViewSet):
 
 
 class ProjetoView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
     serializer_class = serializer.ProjetoSerializer
     queryset = models.Projetos.objects.all()
 
@@ -63,12 +75,14 @@ class ProjetoView(viewsets.ModelViewSet):
             )
 
 class AlocacoesView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
     serializer_class = serializer.AlocacoeSerializer
     queryset = models.Alocacoes.objects.all()
 
-    @action(detail=True, methods=['post'])
-    def alocar(self, request, pk=None):
-        projeto_id = pk
+    @action(detail=False, methods=['post'])
+    def alocar(self, request):
+        projeto_id = request.data.get('projeto_id')
         programador_id = request.data.get('programador_id')
 
         try:
@@ -85,32 +99,36 @@ class AlocacoesView(viewsets.ModelViewSet):
             if not tecnologias_comuns.exists():
                 return Response(
                     {'error': 'O programador não tem tecnologias cadastradas!'},
-                    status=HTTPStatus.FORBIDDEN
+                    status=HTTPStatus.BAD_REQUEST
                 )
-            
-            data_inicial = parse_datetime(projeto.datainicio) 
-            data_final = parse_datetime(projeto.datafim) 
-            data_alocacao = parse_datetime(data_alocacao) 
-            if data_alocacao < data_inicial or data_alocacao > data_final: 
-                return Response(
-                    {'error': 'A data de alocação deve estar dentro do intervalo do projeto'},
-                    status=HTTPStatus.NOT_FOUND
-                ),
 
-            horas_alocadas = sum(alocacao.horas for alocacao in projeto.alocacoes_set.all()) 
-            if horas_alocadas + horas_planejadas > projeto.horas: 
+            data_inicial = projeto.datainicio.isoformat()
+            data_final = projeto.datafim.isoformat()
+            if data_alocacao < data_inicial or data_alocacao > data_final: 
+                return Response( 
+                    {'error': 'A data de alocação deve estar dentro do intervalo do projeto'}, 
+                    status=HTTPStatus.BAD_REQUEST 
+                )
+
+
+            if horas_planejadas > projeto.horas.isoformat(): 
                 return Response(
                     {'error': 'As horas planejadas para o projeto serão excedidas com essa alocação'}, 
                     status=HTTPStatus.BAD_REQUEST
                 )
 
             alocacao, created = models.Alocacoes.objects.get_or_create( 
-                programador=programador, 
-                projeto=projeto,
+                desenvolvedor=programador, 
                 defaults={'horas': horas_planejadas,} 
             )
+            alocacao.projetos.add(projeto)
+            alocacao.save()
+
             if created:
-                return Response({'status': HTTPStatus.CREATED})
+                return Response(
+                    {'id': alocacao.id}, 
+                    status=HTTPStatus.CREATED
+                )
             else:
                 return Response(
                     {'status': 'Programador já alocado neste Projeto!'},
@@ -127,8 +145,8 @@ class AlocacoesView(viewsets.ModelViewSet):
                 status=error
             )
         
-    @action(detail=True, methods=['delete'])
-    def apagarAlocacao(self, request, pk=None):
+    @action(detail=False, methods=['delete'])
+    def apagarAlocacao(self, request):
         if not request.data['id']:
             return Response(
                 {'status': 'Não foi passado o id'},
@@ -150,6 +168,8 @@ class AlocacoesView(viewsets.ModelViewSet):
 
 
 class TecnologiasView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
     serializer_class = serializer.TecnologiaSerializer
     queryset = models.Tecnologias.objects.all()
 
